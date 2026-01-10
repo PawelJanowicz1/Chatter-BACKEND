@@ -13,20 +13,23 @@ public class ChatService {
 
     private final ChatKafkaProducer chatKafkaProducer;
 
-    public void onMessage(ChatMessage chatMessage){
+    public void onMessage(ChatMessage chatMessage) {
         String sender = safeTrim(chatMessage.sender());
         String content = safeTrim(chatMessage.content());
-        MessageType type = chatMessage.messageType() != null ? chatMessage.messageType() : MessageType.CHAT;
+        String roomId = safeTrim(chatMessage.roomId());
+        if (roomId != null && roomId.isBlank()) {
+            roomId = null;
+        }
 
-        String sentAt = Instant.now().toString();
+        MessageType messageType = chatMessage.messageType() != null ? chatMessage.messageType() : MessageType.CHAT;
 
         ChatMessage normalized = new ChatMessage(
-                type,
+                messageType,
                 sender,
-                null, // disabled for now
-                null, // disabled for now
+                null,
+                roomId,
                 content != null && content.length() > 1000 ? content.substring(0, 1000) : content,
-                sentAt
+                Instant.now().toString()
         );
 
         chatKafkaProducer.publish(normalized);

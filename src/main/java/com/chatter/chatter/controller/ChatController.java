@@ -13,7 +13,7 @@ public class ChatController {
 
     private final ChatService chatService;
 
-    @MessageMapping("/chat")
+    @MessageMapping("/general/chat")
     public void onMessage(@Valid ChatMessage incoming) {
         chatService.onMessage(incoming);
     }

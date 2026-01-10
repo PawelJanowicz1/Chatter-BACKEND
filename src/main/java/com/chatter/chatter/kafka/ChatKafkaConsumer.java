@@ -15,7 +15,12 @@ public class ChatKafkaConsumer {
     }
 
     @KafkaListener(topics = "chat.messages")
-    public void consume(ChatMessage message) {
-        messagingTemplate.convertAndSend("/topic/public", message);
+    public void consume(ChatMessage chatMessage) {
+        String roomId = chatMessage.roomId();
+        String destination = (roomId != null && !roomId.isBlank())
+                ? "/topic/rooms/" + roomId.trim()
+                : "/topic/public";
+
+        messagingTemplate.convertAndSend(destination, chatMessage);
     }
 }
