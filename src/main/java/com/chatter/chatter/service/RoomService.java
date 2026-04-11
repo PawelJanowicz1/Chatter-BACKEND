@@ -1,9 +1,8 @@
 package com.chatter.chatter.service;
-
+import com.chatter.chatter.model.Room;
 import com.chatter.chatter.dto.RoomCreateRequest;
 import com.chatter.chatter.dto.RoomResponse;
 import com.chatter.chatter.repository.RoomRepository;
-import com.chatter.chatter.model.Room;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;

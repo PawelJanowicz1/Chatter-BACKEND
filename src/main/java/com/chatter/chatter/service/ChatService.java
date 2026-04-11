@@ -5,6 +5,7 @@ import com.chatter.chatter.enums.MessageType;
 import com.chatter.chatter.kafka.ChatKafkaProducer;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+
 import java.time.Instant;
 
 @Service
@@ -12,6 +13,7 @@ import java.time.Instant;
 public class ChatService {
 
     private final ChatKafkaProducer chatKafkaProducer;
+    private final ChatHistoryService chatHistoryService;
 
     public void onMessage(ChatMessage chatMessage) {
         String sender = safeTrim(chatMessage.sender());
@@ -31,6 +33,9 @@ public class ChatService {
                 content != null && content.length() > 1000 ? content.substring(0, 1000) : content,
                 Instant.now().toString()
         );
+        if (roomId == null) {
+            chatHistoryService.saveMessage(normalized);
+        }
 
         chatKafkaProducer.publish(normalized);
     }

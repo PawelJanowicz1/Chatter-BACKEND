@@ -1,6 +1,7 @@
 package com.chatter.chatter;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class ChatterApplicationTests {
@@ -8,5 +9,4 @@ class ChatterApplicationTests {
     @Test
     void contextLoads() {
     }
-
 }
