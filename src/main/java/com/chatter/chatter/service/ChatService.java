@@ -19,11 +19,14 @@ public class ChatService {
         String sender = safeTrim(chatMessage.sender());
         String content = safeTrim(chatMessage.content());
         String roomId = safeTrim(chatMessage.roomId());
+
         if (roomId != null && roomId.isBlank()) {
             roomId = null;
         }
 
-        MessageType messageType = chatMessage.messageType() != null ? chatMessage.messageType() : MessageType.CHAT;
+        MessageType messageType = chatMessage.messageType() != null
+                ? chatMessage.messageType()
+                : MessageType.CHAT;
 
         ChatMessage normalized = new ChatMessage(
                 messageType,
@@ -33,7 +36,8 @@ public class ChatService {
                 content != null && content.length() > 1000 ? content.substring(0, 1000) : content,
                 Instant.now().toString()
         );
-        if (roomId == null) {
+
+        if (roomId == null && messageType == MessageType.CHAT) {
             chatHistoryService.saveMessage(normalized);
         }
 
