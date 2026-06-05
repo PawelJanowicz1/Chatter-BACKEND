@@ -44,6 +44,28 @@ public class ChatService {
         chatKafkaProducer.publish(normalized);
     }
 
+    public void onRoomMessage(ChatMessage chatMessage, String roomId) {
+        String sender = safeTrim(chatMessage.sender());
+        String content = safeTrim(chatMessage.content());
+
+        MessageType messageType = chatMessage.messageType() != null
+                ? chatMessage.messageType()
+                : MessageType.CHAT;
+
+        ChatMessage normalized = new ChatMessage(
+                messageType,
+                sender,
+                null,
+                roomId,
+                messageType == MessageType.CHAT && content != null && content.length() > 1000
+                        ? content.substring(0, 1000)
+                        : content,
+                Instant.now().toString()
+        );
+
+        chatKafkaProducer.publishToRoom(normalized, roomId);
+    }
+
     private static String safeTrim(String text) {
         return text == null ? null : text.strip();
     }

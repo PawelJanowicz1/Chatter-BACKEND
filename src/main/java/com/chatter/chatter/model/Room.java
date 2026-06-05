@@ -19,4 +19,5 @@ public class Room {
     private String name;
     private Long maxCapacity;
     private Boolean isPrivate;
+    private String password;
 }

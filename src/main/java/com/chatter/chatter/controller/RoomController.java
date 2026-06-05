@@ -1,14 +1,14 @@
 package com.chatter.chatter.controller;
 
 import com.chatter.chatter.dto.RoomCreateRequest;
+import com.chatter.chatter.dto.RoomJoinRequest;
 import com.chatter.chatter.dto.RoomResponse;
 import com.chatter.chatter.service.RoomService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -24,5 +24,16 @@ public class RoomController {
     @GetMapping("/rooms")
     public List<RoomResponse> listAllRooms() {
         return roomService.listAllRooms();
+    }
+
+    @PostMapping("/rooms/{roomId}/join")
+    public ResponseEntity<Void> joinRoom(@PathVariable Long roomId, @Valid @RequestBody RoomJoinRequest request) {
+        roomService.joinRoom(roomId, request);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/rooms/{roomId}")
+    public RoomResponse getRoomById(@PathVariable Long roomId) {
+        return roomService.getRoomById(roomId);
     }
 }
